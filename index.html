@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Smashr Smash Burgers Melbourne — Smashed to Perfection. Get in.">
+    <title>SMASHR — Smash Burgers Melbourne</title>
+
+    <!--
+        Fonts:
+        - Fredoka (700): rounded retro display, matches the mascot/logo energy
+        - Nunito (400 500 700): clean, rounded body text
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    forest: '#1B4332',
+                    'forest-mid': '#2D6A4F',
+                    gold:   '#C9A227',
+                    cream:  '#F5EFE0',
+                    ink:    '#1A1A1A',
+                },
+                fontFamily: {
+                    display: ['Fredoka', 'sans-serif'],
+                    body:    ['Nunito',  'sans-serif'],
+                }
+            }
+        }
+    }
+    </script>
+
+    <style>
+        /* ── Scroll reveal ─────────────────────────────── */
+        .reveal { opacity:0; transform:translateY(20px); transition:opacity .6s ease, transform .6s ease; }
+        .reveal.in { opacity:1; transform:none; }
+        .reveal-fade { opacity:0; transition:opacity .7s ease; }
+        .reveal-fade.in { opacity:1; }
+        .d1{transition-delay:.08s} .d2{transition-delay:.16s}
+        .d3{transition-delay:.24s} .d4{transition-delay:.34s}
+
+        @media(prefers-reduced-motion:reduce){
+            .reveal,.reveal-fade{opacity:1!important;transform:none!important;transition:none!important;}
+            .marquee-track,.spin-slow{animation:none!important;}
+        }
+
+        /* ── Marquee ───────────────────────────────────── */
+        @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+        .marquee-track { display:flex; white-space:nowrap; animation:marquee 24s linear infinite; }
+
+        /* ── Badge spin ────────────────────────────────── */
+        @keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        .spin-slow { animation:spin 20s linear infinite; }
+
+        /* ── Menu card ─────────────────────────────────── */
+        .menu-card { transition:transform .2s ease, box-shadow .2s ease; }
+        .menu-card:hover, .menu-card:focus-within {
+            transform:translateY(-4px);
+            box-shadow:0 14px 32px rgba(27,67,50,.2);
+        }
+        .menu-card .card-img { transition:transform .45s ease; }
+        .menu-card:hover .card-img { transform:scale(1.06); }
+
+        /* ── Checkerboard pattern ──────────────────────── */
+        .checker {
+            background-image:
+                repeating-conic-gradient(#1B4332 0% 25%, transparent 0% 50%);
+            background-size: 20px 20px;
+        }
+        .checker-cream {
+            background-image:
+                repeating-conic-gradient(#F5EFE0 0% 25%, transparent 0% 50%);
+            background-size: 16px 16px;
+        }
+
+        /* ── Gallery hover ─────────────────────────────── */
+        .gal-cell img { transition:transform .45s ease; }
+        .gal-cell:hover img { transform:scale(1.07); }
+
+        /* ── Scrollbar ─────────────────────────────────── */
+        ::-webkit-scrollbar{width:3px}
+        ::-webkit-scrollbar-track{background:#F5EFE0}
+        ::-webkit-scrollbar-thumb{background:#1B4332}
+
+        /* ── Nav link underline ────────────────────────── */
+        .nl{position:relative;}
+        .nl::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#C9A227;transition:width .2s ease;}
+        .nl:hover::after{width:100%;}
+    </style>
+</head>
+
+<body class="bg-cream font-body text-ink overflow-x-hidden">
+
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav id="nav"
+     class="fixed top-0 left-0 right-0 z-50 bg-forest transition-shadow duration-300"
+     aria-label="Main navigation">
+
+    <!-- Thin gold top stripe -->
+    <div class="h-1 bg-gold w-full" aria-hidden="true"></div>
+
+    <div class="max-w-7xl mx-auto px-5 lg:px-12 py-3 flex items-center justify-between">
+
+        <!-- Logo wordmark -->
+        <a href="#"
+           class="font-display font-700 text-cream text-3xl lg:text-4xl leading-none
+                  tracking-wide cursor-pointer
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+           aria-label="Smashr — home">
+            Smashr
+        </a>
+
+        <!-- Desktop links -->
+        <div class="hidden md:flex items-center gap-8">
+            <a href="#menu"     class="nl font-body font-600 text-sm text-cream/80 hover:text-cream transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">Menu</a>
+            <a href="#craft"    class="nl font-body font-600 text-sm text-cream/80 hover:text-cream transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">Our Craft</a>
+            <a href="#location" class="nl font-body font-600 text-sm text-cream/80 hover:text-cream transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">Find Us</a>
+        </div>
+
+        <!-- CTA -->
+        <a href="#location"
+           class="hidden md:inline-flex items-center gap-2
+                  bg-gold text-forest font-body font-700 text-sm
+                  px-5 py-2.5 rounded-sm cursor-pointer
+                  hover:bg-cream transition-colors duration-200
+                  focus:outline-none focus-visible:ring-2 focus-visible:ring-cream">
+            Order Now
+        </a>
+
+        <!-- Hamburger -->
+        <button id="mob-toggle"
+                class="md:hidden text-cream cursor-pointer p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+                aria-label="Open menu" aria-expanded="false" aria-controls="mob-menu">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                <line x1="3" y1="7"  x2="21" y2="7"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="17" x2="21" y2="17"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile dropdown -->
+    <div id="mob-menu" class="md:hidden hidden border-t border-cream/10">
+        <div class="flex flex-col gap-0 divide-y divide-cream/10">
+            <a href="#menu"     class="font-body font-600 text-sm text-cream/80 hover:bg-forest-mid hover:text-cream px-6 py-4 cursor-pointer transition-colors">Menu</a>
+            <a href="#craft"    class="font-body font-600 text-sm text-cream/80 hover:bg-forest-mid hover:text-cream px-6 py-4 cursor-pointer transition-colors">Our Craft</a>
+            <a href="#location" class="font-body font-600 text-sm text-cream/80 hover:bg-forest-mid hover:text-cream px-6 py-4 cursor-pointer transition-colors">Find Us</a>
+            <a href="#location" class="bg-gold text-forest font-body font-700 text-sm px-6 py-4 cursor-pointer hover:bg-cream transition-colors duration-200">Order Now →</a>
+        </div>
+    </div>
+</nav>
+
+
+<!-- ═══════════════════════════ HERO ══════════════════════════ -->
+<section class="relative min-h-screen overflow-hidden" aria-label="Hero">
+
+    <!-- Background: mural photo -->
+    <div class="absolute inset-0">
+        <img src="Brand%20Assets/hf_20260621_124152_77af8c81-774d-467a-939d-8edb47137ecf.png"
+             alt=""
+             class="w-full h-full object-cover"
+             aria-hidden="true">
+        <div class="absolute inset-0 bg-forest/75"></div>
+    </div>
+
+    <!-- Spinning badge (top right) -->
+    <div class="absolute top-20 right-5 lg:top-24 lg:right-12 w-24 lg:w-32 z-10 reveal-fade d4"
+         aria-hidden="true">
+        <img src="Brand%20Assets/hf_20260621_124539_05425ef9-5ff8-4af5-bcec-c195c5474466.png"
+             alt=""
+             class="w-full h-auto object-contain spin-slow drop-shadow-2xl">
+    </div>
+
+    <!-- Content -->
+    <div class="relative z-10 min-h-screen flex flex-col justify-end
+                max-w-7xl mx-auto px-6 lg:px-12 pb-12 pt-28 w-full">
+
+        <!-- Logo sticker -->
+        <div class="reveal w-40 lg:w-52 mb-4">
+            <img src="Brand%20Assets/hf_20260621_123123_f7b62e2f-ad17-4b78-b623-8dd2bf5352a8.png"
+                 alt="Smashr Smash Burgers"
+                 class="w-full h-auto rounded-lg shadow-2xl">
+        </div>
+
+        <!-- Big headline -->
+        <h1 class="reveal d1 font-display font-700 text-cream leading-none mb-4"
+            style="font-size: clamp(4rem,15vw,13rem); letter-spacing:-0.01em;">
+            SMASHED.<br>
+            SEARED.<br>
+            <span class="text-gold">PERFECTED.</span>
+        </h1>
+
+        <p class="reveal d2 font-body font-500 text-cream/70 text-lg max-w-xs leading-snug mb-8">
+            Melbourne's best smash burgers. Fresh beef. No BS.
+        </p>
+
+        <div class="reveal d3 flex flex-wrap gap-3">
+            <a href="#menu"
+               class="inline-flex items-center gap-2 bg-gold text-forest
+                      font-body font-700 text-base px-7 py-3.5 rounded-sm cursor-pointer
+                      hover:bg-cream transition-colors duration-200
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-cream">
+                See The Menu
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+            <a href="#location"
+               class="inline-flex items-center gap-2 border-2 border-cream/40 text-cream
+                      font-body font-700 text-base px-7 py-3.5 rounded-sm cursor-pointer
+                      hover:border-cream hover:bg-cream/10 transition-all duration-200
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-cream">
+                Find Us
+            </a>
+        </div>
+    </div>
+
+    <!-- Checkerboard bottom strip -->
+    <div class="absolute bottom-0 left-0 right-0 h-4 checker opacity-40" aria-hidden="true"></div>
+</section>
+
+
+<!-- ═══════════════════════ GOLD MARQUEE ═══════════════════════ -->
+<div class="bg-gold py-3 overflow-hidden" aria-hidden="true">
+    <div class="marquee-track font-display font-700 text-forest text-xl tracking-wider select-none">
+        <span class="px-6">SMASHED TO PERFECTION</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">FRESH BEEF DAILY</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">100% NO FILLERS</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">MELBOURNE'S BEST</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">GOOD TIMES GREAT BURGERS</span>
+        <span class="px-3">✶</span>
+        <!-- dupe for seamless loop -->
+        <span class="px-6">SMASHED TO PERFECTION</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">FRESH BEEF DAILY</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">100% NO FILLERS</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">MELBOURNE'S BEST</span>
+        <span class="px-3">✶</span>
+        <span class="px-6">GOOD TIMES GREAT BURGERS</span>
+        <span class="px-3">✶</span>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════ MENU ══════════════════════════ -->
+<section id="menu" class="bg-cream py-14 lg:py-20 px-5 lg:px-12" aria-label="Menu">
+    <div class="max-w-7xl mx-auto">
+
+        <!-- Header -->
+        <div class="reveal flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
+            <div>
+                <span class="inline-block bg-forest text-gold font-body font-700 text-xs tracking-widest
+                             px-3 py-1.5 mb-3 uppercase">The Menu</span>
+                <h2 class="font-display font-700 text-forest text-5xl lg:text-7xl leading-none">
+                    THE CLASSICS
+                </h2>
+            </div>
+            <a href="#"
+               class="inline-flex items-center gap-2 self-start sm:self-end
+                      font-body font-700 text-sm text-forest border-b-2 border-forest
+                      pb-0.5 cursor-pointer hover:text-gold hover:border-gold transition-colors duration-200
+                      focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+                Full Menu →
+            </a>
+        </div>
+
+        <!-- Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+            <!-- 01 The Original -->
+            <article class="menu-card bg-white border-2 border-forest overflow-hidden cursor-pointer"
+                     tabindex="0" aria-label="The Original burger">
+                <!-- Image -->
+                <div class="relative h-52 overflow-hidden bg-ink">
+                    <img src="Brand%20Assets/hf_20260621_124320_f56d6bee-c43c-4c47-8ba9-4f93f44e2a2a.png"
+                         alt="The Original Smashr burger on kraft paper"
+                         class="card-img w-full h-full object-cover">
+                    <!-- Number badge -->
+                    <div class="absolute top-3 left-3 bg-gold text-forest font-display font-700 text-xl w-9 h-9 rounded-full flex items-center justify-center shadow-lg"
+                         aria-hidden="true">1</div>
+                </div>
+                <!-- Content -->
+                <div class="p-5 border-t-2 border-forest">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <h3 class="font-display font-700 text-forest text-xl leading-tight">The Original</h3>
+                        <span class="font-body font-700 text-gold text-lg flex-shrink-0">$14.50</span>
+                    </div>
+                    <p class="font-body text-sm text-ink/65 leading-relaxed">
+                        Double smash patty, American cheese, house sauce, crispy onions. The OG.
+                    </p>
+                    <div class="mt-4 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                        <span class="font-body font-700 text-xs text-ink/50 uppercase tracking-wider">Bestseller</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 02 The Double Down -->
+            <article class="menu-card bg-white border-2 border-forest overflow-hidden cursor-pointer"
+                     tabindex="0" aria-label="The Double Down burger">
+                <div class="relative h-52 overflow-hidden bg-ink">
+                    <img src="Brand%20Assets/hf_20260621_124242_481def8f-2391-474d-9e62-fbc046f001b5.png"
+                         alt="Double Down smash burger close-up with melted cheese"
+                         class="card-img w-full h-full object-cover">
+                    <div class="absolute top-3 left-3 bg-gold text-forest font-display font-700 text-xl w-9 h-9 rounded-full flex items-center justify-center shadow-lg"
+                         aria-hidden="true">2</div>
+                </div>
+                <div class="p-5 border-t-2 border-forest">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <h3 class="font-display font-700 text-forest text-xl leading-tight">The Double Down</h3>
+                        <span class="font-body font-700 text-gold text-lg flex-shrink-0">$18.50</span>
+                    </div>
+                    <p class="font-body text-sm text-ink/65 leading-relaxed">
+                        Triple smash, smoked cheddar, bacon jam, chipotle mayo, caramelised onion.
+                    </p>
+                    <div class="mt-4 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-forest flex-shrink-0"></span>
+                        <span class="font-body font-700 text-xs text-ink/50 uppercase tracking-wider">Signature</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 03 The Side Hustle -->
+            <article class="menu-card bg-white border-2 border-forest overflow-hidden cursor-pointer"
+                     tabindex="0" aria-label="The Side Hustle – fries">
+                <div class="relative h-52 overflow-hidden bg-ink">
+                    <img src="Brand%20Assets/hf_20260621_124249_7355af8e-e0ad-4d90-893d-12a11317db5d.png"
+                         alt="Smashr shoestring fries in branded cone with dipping sauce"
+                         class="card-img w-full h-full object-cover">
+                    <div class="absolute top-3 left-3 bg-gold text-forest font-display font-700 text-xl w-9 h-9 rounded-full flex items-center justify-center shadow-lg"
+                         aria-hidden="true">3</div>
+                </div>
+                <div class="p-5 border-t-2 border-forest">
+                    <div class="flex items-start justify-between gap-2 mb-2">
+                        <h3 class="font-display font-700 text-forest text-xl leading-tight">The Side Hustle</h3>
+                        <span class="font-body font-700 text-gold text-lg flex-shrink-0">$6.50</span>
+                    </div>
+                    <p class="font-body text-sm text-ink/65 leading-relaxed">
+                        Shoestring fries in a branded cone. House sauce on the side. Non-negotiable.
+                    </p>
+                    <div class="mt-4 flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-gold flex-shrink-0"></span>
+                        <span class="font-body font-700 text-xs text-ink/50 uppercase tracking-wider">Must Order</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════ CHECKER DIVIDER ══════════════════════ -->
+<div class="h-5 checker" aria-hidden="true"></div>
+
+
+<!-- ═══════════════════════════ CRAFT ═════════════════════════ -->
+<section id="craft" class="relative overflow-hidden" style="min-height:520px;"
+         aria-label="The craft">
+
+    <!-- Full-bleed photo -->
+    <div class="absolute inset-0">
+        <img src="Brand%20Assets/hf_20260621_124214_297c795f-753e-4704-9272-f074818558bf.png"
+             alt="A smash burger patty being pressed hard onto a screaming-hot griddle, steam rising, cheese melting"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0"
+             style="background:linear-gradient(to right,rgba(27,67,50,.92) 0%,rgba(27,67,50,.6) 55%,rgba(27,67,50,.1) 100%)"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-16 lg:py-24">
+        <div class="max-w-lg">
+            <span class="reveal inline-block bg-gold text-forest font-body font-700 text-xs
+                         tracking-widest px-3 py-1.5 mb-5 uppercase">
+                The Method
+            </span>
+            <h2 class="reveal d1 font-display font-700 text-cream leading-none mb-6"
+                style="font-size:clamp(2.8rem,8vw,7rem);">
+                STEEL.<br>HEAT.<br>PRESSURE.<br>
+                <span class="text-gold">PERFECTION.</span>
+            </h2>
+            <p class="reveal d2 font-body font-500 text-cream/70 text-base lg:text-lg leading-relaxed mb-5">
+                At 425°, beef fat renders and proteins transform. The Maillard reaction
+                creates a crust you can't replicate any other way.
+            </p>
+            <p class="reveal d3 font-body text-cream/55 text-sm leading-relaxed mb-10">
+                100% Victorian beef. Ground fresh every morning. Zero fillers.
+            </p>
+
+            <!-- Stats row -->
+            <div class="reveal d4 flex gap-8 lg:gap-12">
+                <div>
+                    <p class="font-display font-700 text-gold leading-none"
+                       style="font-size:clamp(2rem,5vw,3.5rem);">425°</p>
+                    <p class="font-body text-cream/40 text-xs tracking-wider mt-1">Steel Temp</p>
+                </div>
+                <div>
+                    <p class="font-display font-700 text-gold leading-none"
+                       style="font-size:clamp(2rem,5vw,3.5rem);">100%</p>
+                    <p class="font-body text-cream/40 text-xs tracking-wider mt-1">Real Beef</p>
+                </div>
+                <div>
+                    <p class="font-display font-700 text-gold leading-none"
+                       style="font-size:clamp(2rem,5vw,3.5rem);">0</p>
+                    <p class="font-body text-cream/40 text-xs tracking-wider mt-1">Fillers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════ CHECKER DIVIDER ══════════════════════ -->
+<div class="h-5 checker" aria-hidden="true"></div>
+
+
+<!-- ══════════════════════ PHOTO GALLERY ═══════════════════════ -->
+<section aria-label="Food photography" class="grid grid-cols-2 md:grid-cols-4 gap-0.5 bg-forest">
+    <div class="gal-cell overflow-hidden aspect-square cursor-pointer">
+        <img src="Brand%20Assets/hf_20260621_124232_5a64187c-632d-47ad-b665-b0941c6c991d.png"
+             alt="Smashr burger on branded tray with packaging" class="w-full h-full object-cover">
+    </div>
+    <div class="gal-cell overflow-hidden aspect-square cursor-pointer">
+        <img src="Brand%20Assets/hf_20260621_124214_297c795f-753e-4704-9272-f074818558bf.png"
+             alt="Smash burger being pressed on a hot griddle with steam" class="w-full h-full object-cover">
+    </div>
+    <div class="gal-cell overflow-hidden aspect-square cursor-pointer">
+        <img src="Brand%20Assets/hf_20260621_124320_f56d6bee-c43c-4c47-8ba9-4f93f44e2a2a.png"
+             alt="Smashr burger overhead on kraft paper" class="w-full h-full object-cover">
+    </div>
+    <div class="gal-cell overflow-hidden aspect-square cursor-pointer">
+        <img src="Brand%20Assets/hf_20260621_124249_7355af8e-e0ad-4d90-893d-12a11317db5d.png"
+             alt="Shoestring fries in Smashr branded cone" class="w-full h-full object-cover">
+    </div>
+</section>
+
+
+<!-- ════════════════════════ SOCIAL PROOF ═════════════════════ -->
+<section class="bg-forest py-14 lg:py-20 px-5 lg:px-12" aria-label="Reviews">
+    <div class="max-w-7xl mx-auto">
+
+        <div class="reveal text-center mb-10">
+            <span class="inline-block bg-gold text-forest font-body font-700 text-xs
+                         tracking-widest px-3 py-1.5 mb-4 uppercase">
+                The Word on the Street
+            </span>
+            <h2 class="font-display font-700 text-cream text-4xl lg:text-6xl leading-none">
+                PEOPLE ARE TALKING
+            </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6">
+
+            <blockquote class="reveal bg-cream border-l-4 border-gold p-6">
+                <p class="font-body font-500 text-ink/75 text-base leading-relaxed italic mb-5">
+                    &ldquo;That crust is the best thing I&rsquo;ve eaten all year.
+                    I literally came back the next day.&rdquo;
+                </p>
+                <footer class="flex items-center gap-3">
+                    <div class="w-5 h-0.5 bg-gold flex-shrink-0"></div>
+                    <span class="font-body font-700 text-xs text-forest/60 uppercase tracking-wider">
+                        James T. — Fitzroy
+                    </span>
+                </footer>
+            </blockquote>
+
+            <blockquote class="reveal d2 bg-cream border-l-4 border-gold p-6">
+                <p class="font-body font-500 text-ink/75 text-base leading-relaxed italic mb-5">
+                    &ldquo;Finally a place that takes smash burgers seriously.
+                    Brioche, sauce, crust — all dialled in.&rdquo;
+                </p>
+                <footer class="flex items-center gap-3">
+                    <div class="w-5 h-0.5 bg-gold flex-shrink-0"></div>
+                    <span class="font-body font-700 text-xs text-forest/60 uppercase tracking-wider">
+                        Priya M. — Collingwood
+                    </span>
+                </footer>
+            </blockquote>
+
+            <blockquote class="reveal d3 bg-cream border-l-4 border-gold p-6">
+                <p class="font-body font-500 text-ink/75 text-base leading-relaxed italic mb-5">
+                    &ldquo;Simple menu. Zero shortcuts. Best $15 in Melbourne.
+                    The queue is always worth it.&rdquo;
+                </p>
+                <footer class="flex items-center gap-3">
+                    <div class="w-5 h-0.5 bg-gold flex-shrink-0"></div>
+                    <span class="font-body font-700 text-xs text-forest/60 uppercase tracking-wider">
+                        Callum R. — Northcote
+                    </span>
+                </footer>
+            </blockquote>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════ CHECKER DIVIDER ══════════════════════ -->
+<div class="h-5 checker" aria-hidden="true"></div>
+
+
+<!-- ════════════════════════ FIND US ══════════════════════════ -->
+<section id="location" class="overflow-hidden" aria-label="Location and hours">
+    <div class="grid grid-cols-1 lg:grid-cols-2">
+
+        <!-- Photo side -->
+        <div class="relative min-h-72 lg:min-h-0">
+            <img src="Brand%20Assets/hf_20260621_124300_e7927f34-7188-46a4-81cb-87e443cac11d.png"
+                 alt="People queuing outside Smashr at night under the glowing sign"
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-ink/35"></div>
+            <div class="absolute bottom-6 left-6 lg:bottom-8 lg:left-8">
+                <p class="font-display font-700 text-2xl lg:text-3xl text-cream drop-shadow-lg leading-snug">
+                    GOOD TIMES.<br>
+                    <span class="text-gold">GREAT BURGERS.</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Info side -->
+        <div class="bg-forest text-cream py-12 lg:py-16 px-6 lg:px-12">
+            <span class="reveal inline-block bg-gold text-forest font-body font-700 text-xs
+                         tracking-widest px-3 py-1.5 mb-5 uppercase">
+                Come Find Us
+            </span>
+            <h2 class="reveal d1 font-display font-700 text-4xl lg:text-5xl text-cream mb-10 leading-none">
+                WE'RE OPEN.
+            </h2>
+
+            <!-- Address -->
+            <div class="reveal d2 mb-8">
+                <p class="font-body font-700 text-xs text-cream/40 tracking-widest uppercase mb-2">Address</p>
+                <address class="font-body font-500 text-cream text-base leading-relaxed not-italic mb-3">
+                    123 Smith Street<br>
+                    Fitzroy, Melbourne VIC 3065
+                </address>
+                <a href="#"
+                   class="inline-flex items-center gap-1.5 font-body font-700 text-sm text-gold
+                          border-b border-gold/50 pb-0.5 cursor-pointer
+                          hover:border-gold transition-colors duration-200
+                          focus:outline-none focus-visible:ring-2 focus-visible:ring-gold">
+                    Get Directions →
+                </a>
+            </div>
+
+            <!-- Hours -->
+            <div class="reveal d3 mb-9">
+                <p class="font-body font-700 text-xs text-cream/40 tracking-widest uppercase mb-3">Hours</p>
+                <div class="divide-y divide-cream/10">
+                    <div class="flex justify-between py-2.5">
+                        <span class="font-body font-500 text-sm text-cream">Mon – Fri</span>
+                        <span class="font-body font-500 text-sm text-cream/55">11:30 – 21:30</span>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <span class="font-body font-500 text-sm text-cream">Saturday</span>
+                        <span class="font-body font-500 text-sm text-cream/55">11:00 – 22:30</span>
+                    </div>
+                    <div class="flex justify-between py-2.5">
+                        <span class="font-body font-500 text-sm text-cream">Sunday</span>
+                        <span class="font-body font-500 text-sm text-cream/55">12:00 – 21:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA -->
+            <div class="reveal d4">
+                <a href="#"
+                   class="inline-flex items-center gap-2
+                          bg-gold text-forest font-body font-700 text-base
+                          px-7 py-3.5 rounded-sm cursor-pointer
+                          hover:bg-cream transition-colors duration-200
+                          focus:outline-none focus-visible:ring-2 focus-visible:ring-cream">
+                    Reserve a Table →
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════════════ CHECKER DIVIDER ══════════════════════ -->
+<div class="h-5 checker" aria-hidden="true"></div>
+
+
+<!-- ════════════════════════ FOOTER ═══════════════════════════ -->
+<footer class="bg-ink text-cream" role="contentinfo">
+
+    <!-- Pattern strip -->
+    <div class="h-16 overflow-hidden opacity-15" aria-hidden="true">
+        <img src="Brand%20Assets/hf_20260621_124517_89fc0604-6eef-4055-81cd-974799edd2ab.png"
+             alt="" class="w-full object-cover object-top">
+    </div>
+
+    <div class="px-5 lg:px-12 pt-8 pb-10 border-t border-cream/10">
+        <div class="max-w-7xl mx-auto">
+
+            <div class="flex flex-col md:flex-row items-start md:items-center
+                        justify-between gap-7 mb-8 pb-8 border-b border-cream/10">
+
+                <!-- Brand -->
+                <div class="flex items-center gap-4">
+                    <img src="Brand%20Assets/hf_20260621_124539_05425ef9-5ff8-4af5-bcec-c195c5474466.png"
+                         alt="Smashr badge" class="w-12 h-12 object-contain rounded-full"
+                         aria-hidden="true">
+                    <div>
+                        <p class="font-display font-700 text-xl text-cream leading-none tracking-wide">Smashr</p>
+                        <p class="font-body text-xs text-cream/35 mt-0.5 tracking-wider">SMASH BURGERS — MELBOURNE</p>
+                    </div>
+                </div>
+
+                <!-- Nav -->
+                <nav aria-label="Footer navigation" class="flex flex-wrap gap-5 lg:gap-7">
+                    <a href="#menu"     class="font-body font-600 text-sm text-cream/50 hover:text-cream cursor-pointer transition-colors">Menu</a>
+                    <a href="#craft"    class="font-body font-600 text-sm text-cream/50 hover:text-cream cursor-pointer transition-colors">Our Craft</a>
+                    <a href="#location" class="font-body font-600 text-sm text-cream/50 hover:text-cream cursor-pointer transition-colors">Find Us</a>
+                    <a href="#"         class="font-body font-600 text-sm text-cream/50 hover:text-cream cursor-pointer transition-colors">Instagram</a>
+                </nav>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <p class="font-body text-xs text-cream/25">© 2024 Smashr Melbourne. All rights reserved.</p>
+                <div class="flex gap-5">
+                    <a href="#" class="font-body text-xs text-cream/25 hover:text-cream/55 cursor-pointer transition-colors">Privacy Policy</a>
+                    <a href="#" class="font-body text-xs text-cream/25 hover:text-cream/55 cursor-pointer transition-colors">Allergen Info</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ═══════════════════════════ JS ════════════════════════════ -->
+<script>
+(function(){
+    // Nav shadow on scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+        nav.style.boxShadow = window.scrollY > 50
+            ? '0 4px 24px rgba(0,0,0,0.35)'
+            : 'none';
+    }, {passive:true});
+
+    // Mobile menu
+    const tog = document.getElementById('mob-toggle');
+    const mob = document.getElementById('mob-menu');
+    tog.addEventListener('click', () => {
+        const open = !mob.classList.contains('hidden');
+        mob.classList.toggle('hidden');
+        tog.setAttribute('aria-expanded', String(!open));
+        tog.setAttribute('aria-label', open ? 'Open menu' : 'Close menu');
+    });
+    mob.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        mob.classList.add('hidden');
+        tog.setAttribute('aria-expanded','false');
+        tog.setAttribute('aria-label','Open menu');
+    }));
+
+    // Scroll reveal
+    const reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    if(!reduced){
+        const obs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+            });
+        },{threshold:0.1, rootMargin:'0px 0px -24px 0px'});
+        document.querySelectorAll('.reveal,.reveal-fade').forEach(el => obs.observe(el));
+    } else {
+        document.querySelectorAll('.reveal,.reveal-fade').forEach(el => {
+            el.style.opacity='1'; el.style.transform='none';
+        });
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e){
+            const href = this.getAttribute('href');
+            if(href==='#') return;
+            e.preventDefault();
+            const t = document.querySelector(href);
+            if(!t) return;
+            window.scrollTo({top: t.getBoundingClientRect().top + scrollY - nav.offsetHeight - 6, behavior:'smooth'});
+        });
+    });
+})();
+</script>
+
+</body>
+</html>
